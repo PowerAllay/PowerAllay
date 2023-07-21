@@ -1,6 +1,6 @@
 <h1>PowerAllay<img src="assets/logo/logo.png" height="64" width="64" align="left"></img></h1><br/>
 
-[![Build Status](https://travis-ci.org/PowerAllay/PowerAllay?branch=master)](https://github.com/PowerAllay/PowerAllay)
+[![Build Status](https://travis-ci.org/PowerAllay/PowerAllay?branch=main)](https://github.com/PowerAllay/PowerAllay)
 [![GitHub license](https://img.shields.io/github/license/PowerAllay/PowerAllay.svg)](https://github.com/PowerAllay/PowerAllay/blob/master/LICENSE)
 [![CodeFactor](https://www.codefactor.io/repository/github/PowerAllay/PowerAllay/badge)](https://www.codefactor.io/repository/github/PowerAllay/PowerAllay)
 [![GitHub issues](https://img.shields.io/github/issues/PowerAllay/PowerAllay.svg)](https://github.com/PowerAllay/PowerAllay/issues)
