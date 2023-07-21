@@ -1,0 +1,32 @@
+{
+  "name": "powerallay",
+  "version": "1.0.0",
+  "description": "a software for Minecraft: Bedrock Edition written in Typescript",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node .",
+    "lint": "eslint --ext src/**/*.ts",
+    "dev": "npx nodemon src/PowerAllay.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PowerAllay/PowerAllay.git"
+  },
+  "keywords": [
+    "powerallay"
+  ],
+  "author": "Jacob.G",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/PowerAllay/PowerAllay/issues"
+  },
+  "homepage": "https://github.com/PowerAllay/PowerAllay#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.6"
+  }
+}
