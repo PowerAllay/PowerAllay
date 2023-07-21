@@ -1,4 +1,5 @@
 {
   "selected-language": "Selected language: {0} {1} as the main language",
-  "running-info": "This server is running {0} {1}"
+  "running-info": "This server is running {0} {1}",
+  "minecraft-running-version": "Server is running Minecraft version {0}"
 }

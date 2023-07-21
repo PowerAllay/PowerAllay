@@ -2,10 +2,12 @@ import { Config, types } from './utils/Config';
 import * as path from 'path';
 import { BaseLogger } from './utils/BaseLogger';
 import { Language } from './languages/Language';
+import { createServer, Version } from "bedrock-protocol";
 
 export const VersionInfo = {
     name: 'PowerAllay',
-    version: '1.0.0'
+    version: '1.0.0',
+    minecraftVersion: '1.20.10'
 };
 
 export class PowerAllay {
@@ -13,6 +15,7 @@ export class PowerAllay {
     private language: Language;
     private readonly dataPath: string;
     private readonly baselogger: BaseLogger;
+    private main: any;
 
     /**
      * @constructor
@@ -22,13 +25,7 @@ export class PowerAllay {
         this.baselogger = new BaseLogger(this);
         this.initProperties();
         this.initLanguage();
-        this.getLogger().info(
-            this.getLanguage().translate(
-                'running-info',
-                VersionInfo.name,
-                VersionInfo.version
-            )
-        );
+        this.start().then();
     }
 
     /**
@@ -68,6 +65,30 @@ export class PowerAllay {
         );
     }
 
+    async start() {
+        this.getLogger().info(
+            this.getLanguage().translate(
+                'running-info',
+                VersionInfo.name,
+                VersionInfo.version
+            )
+        );
+        this.main = createServer({
+            host: "127.0.0.1",
+            port: this.getProperties().get('server-port'),
+            motd: {
+                levelName: this.getProperties().get('default-world'),
+                motd: this.getProperties().get('motd'),
+            },
+            maxPlayers: this.getProperties().get('max-players') || 20,
+            offline: false,
+            version: VersionInfo.minecraftVersion as Version
+        })
+        this.getLogger().info(
+            this.getLanguage().translate("minecraft-running-version", VersionInfo.minecraftVersion)
+        )
+    }
+
     /**
      * Get server data path
      */
@@ -101,6 +122,7 @@ export class PowerAllay {
      */
     stop() {
         this.getLogger().info('Stopping server...');
+        this.main.close('Server closed!');
         process.exit(0);
     }
 }
