@@ -1,4 +1,4 @@
-import {PowerAllay} from "../PowerAllay";
+import { PowerAllay } from '../PowerAllay';
 
 export const levels = {
     info: 0,
@@ -13,7 +13,7 @@ export class BaseLogger {
     readonly timezone: string;
     constructor(server: PowerAllay) {
         this.server = server;
-        this.timezone =  Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
 
     getTimezone() {

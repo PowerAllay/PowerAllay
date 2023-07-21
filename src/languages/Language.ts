@@ -1,10 +1,10 @@
-import { PowerAllay } from "../PowerAllay";
-import { LogicException } from "../exception/LogicException";
-import * as fs from "fs";
+import { PowerAllay } from '../PowerAllay';
+import { LogicException } from '../exception/LogicException';
+import * as fs from 'fs';
 
 export const languages: any = {
-    'en_US': 'English',
-}
+    en_US: 'English'
+};
 export class Language {
     readonly server: PowerAllay;
     readonly currentLanguage: any;
@@ -14,9 +14,18 @@ export class Language {
         this.server = server;
         this.currentLanguage = this.server.getProperties().get('language');
         if (this.getName() === undefined) {
-            throw new LogicException(`Language ${this.currentLanguage} not found!`);
+            throw new LogicException(
+                `Language ${this.currentLanguage} not found!`
+            );
         } else {
-            this.languages = JSON.parse(fs.readFileSync(`${this.server.getDataPath()}/src/languages/${this.currentLanguage}.json`, 'utf-8'));
+            this.languages = JSON.parse(
+                fs.readFileSync(
+                    `${this.server.getDataPath()}/src/languages/${
+                        this.currentLanguage
+                    }.json`,
+                    'utf-8'
+                )
+            );
         }
     }
 

@@ -1,2 +1,2 @@
-import { PowerAllay } from "./PowerAllay";
+import { PowerAllay } from './PowerAllay';
 new PowerAllay();

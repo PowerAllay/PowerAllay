@@ -1,11 +1,11 @@
-import { Config, types } from "./utils/Config";
-import * as path from "path";
-import { BaseLogger } from "./utils/BaseLogger";
-import { Language } from "./languages/Language";
+import { Config, types } from './utils/Config';
+import * as path from 'path';
+import { BaseLogger } from './utils/BaseLogger';
+import { Language } from './languages/Language';
 
 export const VersionInfo = {
-    name: "PowerAllay",
-    version: "1.0.0"
+    name: 'PowerAllay',
+    version: '1.0.0'
 };
 
 export class PowerAllay {
@@ -23,7 +23,11 @@ export class PowerAllay {
         this.initProperties();
         this.initLanguage();
         this.getLogger().info(
-            this.getLanguage().translate("running-info", VersionInfo.name, VersionInfo.version)
+            this.getLanguage().translate(
+                'running-info',
+                VersionInfo.name,
+                VersionInfo.version
+            )
         );
     }
 
@@ -34,14 +38,18 @@ export class PowerAllay {
      */
     private initProperties() {
         this.getLogger().info('Loading server properties...');
-        this.properties = new Config(`${this.getDataPath()}/server.json`, types.json, {
-            'server-port': 19132,
-            'motd': 'PowerAllay',
-            'max-players': 20,
-            'default-world': 'world',
-            'language': 'en_US',
-            'debug': false,
-        })
+        this.properties = new Config(
+            `${this.getDataPath()}/server.json`,
+            types.json,
+            {
+                'server-port': 19132,
+                motd: 'PowerAllay',
+                'max-players': 20,
+                'default-world': 'world',
+                language: 'en_US',
+                debug: false
+            }
+        );
     }
 
     /**
@@ -52,7 +60,11 @@ export class PowerAllay {
     private initLanguage() {
         this.language = new Language(this);
         this.getLogger().info(
-            this.getLanguage().translate("selected-language", this.language.getLanguage(), this.language.getName())
+            this.getLanguage().translate(
+                'selected-language',
+                this.language.getLanguage(),
+                this.language.getName()
+            )
         );
     }
 

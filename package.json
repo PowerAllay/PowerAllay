@@ -7,8 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node .",
-    "lint": "eslint --ext src/**/*.ts",
-    "dev": "npx nodemon src/index.ts"
+    "dev": "npx nodemon src/index.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "npx eslint src/**/*.ts --fix",
+    "format": "prettier --config .prettierrc src/**/*.ts --write",
+    "format-check": "prettier --config .prettierrc 'src/**/*.ts' --check",
+    "all": "npm run build && npm run format && npm run lint"
   },
   "repository": {
     "type": "git",

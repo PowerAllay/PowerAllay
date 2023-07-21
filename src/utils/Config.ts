@@ -1,12 +1,10 @@
 import * as fs from 'fs';
 
-
 export const types = {
     json: 0
 };
 
 export class Config {
-
     readonly filename: string;
     readonly ConfigType: number;
     config: any;
@@ -21,7 +19,9 @@ export class Config {
     load() {
         switch (this.ConfigType) {
             case types.json:
-                this.config = JSON.parse(fs.readFileSync(this.filename, 'utf-8'));
+                this.config = JSON.parse(
+                    fs.readFileSync(this.filename, 'utf-8')
+                );
                 break;
         }
     }
