@@ -2,7 +2,10 @@ import { Config, types } from './utils/Config';
 import * as path from 'path';
 import { BaseLogger } from './utils/BaseLogger';
 import { Language } from './languages/Language';
-import { createServer, Version } from 'bedrock-protocol';
+import { createServer, Version, Player } from 'bedrock-protocol';
+import { Client } from './player/Client';
+import { ResourcePacksInfoPacket } from './network/packets/ResourcePacksInfoPacket';
+import { ProtocolInfo } from './network/packets/ProtocolInfo';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -16,6 +19,7 @@ export class PowerAllay {
     private readonly dataPath: string;
     private readonly baselogger: BaseLogger;
     private main: any;
+    private readonly players: Client[] = [];
 
     /**
      * @constructor
@@ -90,6 +94,48 @@ export class PowerAllay {
                 VersionInfo.minecraftVersion
             )
         );
+        this.main.on('connect', (client: Player) => {
+            client.on('login', () => {
+                this.getLogger().info(
+                    this.getLanguage().translate(
+                        'player-login',
+                        client.profile.name
+                    )
+                );
+                if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
+                    client.disconnect('Outdated client!');
+                    this.getLogger().info(
+                        this.getLanguage().translate(
+                            'outdated-client',
+                            client.profile.name
+                        )
+                    );
+                } else if (client.version > ProtocolInfo.CURRENT_PROTOCOL) {
+                    client.disconnect('Outdated server!');
+                    this.getLogger().info(
+                        this.getLanguage().translate(
+                            'outdated-server',
+                            client.profile.name
+                        )
+                    );
+                }
+            });
+            client.on('join', () => {
+                const player = new Client(client);
+                this.players.push(player);
+                player.sendDataPacket(new ResourcePacksInfoPacket());
+            });
+            client.on('close', () => {
+                const player = new Client(client);
+                this.getLogger().info(
+                    this.getLanguage().translate(
+                        'player-logout',
+                        client.profile.name
+                    )
+                );
+                this.players.splice(this.players.indexOf(player), 1);
+            });
+        });
     }
 
     /**

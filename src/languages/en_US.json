@@ -1,5 +1,9 @@
 {
   "selected-language": "Selected language: {0} {1} as the main language",
   "running-info": "This server is running {0} {1}",
-  "minecraft-running-version": "Server is running Minecraft version {0}"
+  "minecraft-running-version": "Server is running Minecraft version {0}",
+  "player-login": "Player {0} has logged in",
+  "player-logout": "Player {0} has logged out",
+  "outdated-client": "Player {0} has tried to join with an outdated client",
+  "outdated-server": "Player {0} has tried to join with an outdated server"
 }
