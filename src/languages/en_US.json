@@ -1,3 +1,4 @@
 {
-  "selected-language": "Selected language: {0} {1} for main language"
+  "selected-language": "Selected language: {0} {1} as the main language",
+  "running-info": "This server is running {0} {1}"
 }
