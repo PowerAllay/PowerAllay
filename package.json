@@ -36,6 +36,7 @@
   "dependencies": {
     "@types/node": "^20.4.2",
     "bedrock-protocol": "^3.30.0",
+    "events": "^3.3.0",
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
     "prettier": "^3.0.0"

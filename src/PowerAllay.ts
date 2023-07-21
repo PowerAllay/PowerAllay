@@ -6,6 +6,8 @@ import { createServer, Version, Player } from 'bedrock-protocol';
 import { Client } from './player/Client';
 import { ResourcePacksInfoPacket } from './network/packets/ResourcePacksInfoPacket';
 import { ProtocolInfo } from './network/packets/ProtocolInfo';
+import { EventEmitter } from 'node:events';
+import { PlayerLoginEvent } from './events/player/PlayerLoginEvent';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -20,6 +22,7 @@ export class PowerAllay {
     private readonly baselogger: BaseLogger;
     private main: any;
     private readonly players: Client[] = [];
+    private events: EventEmitter;
 
     /**
      * @constructor
@@ -27,6 +30,7 @@ export class PowerAllay {
     constructor() {
         this.dataPath = path.join(__dirname, '..');
         this.baselogger = new BaseLogger(this);
+        this.events = new EventEmitter();
         this.initProperties();
         this.initLanguage();
         this.start().then();
@@ -96,11 +100,16 @@ export class PowerAllay {
         );
         this.main.on('connect', (client: Player) => {
             client.on('login', () => {
+                const player = new Client(client);
                 this.getLogger().info(
                     this.getLanguage().translate(
                         'player-login',
                         client.profile.name
                     )
+                );
+                this.events.emit(
+                    'PlayerLoginEvent',
+                    new PlayerLoginEvent(player)
                 );
                 if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
                     client.disconnect('Outdated client!');
@@ -164,6 +173,16 @@ export class PowerAllay {
      */
     getLanguage() {
         return this.language;
+    }
+
+    /**
+     * Handle server events
+     *
+     * @param event
+     * @param callback
+     */
+    on(event: string, callback: any) {
+        this.events.on(event, callback);
     }
 
     /**
