@@ -2,7 +2,7 @@ import { Config, types } from './utils/Config';
 import * as path from 'path';
 import { BaseLogger } from './utils/BaseLogger';
 import { Language } from './languages/Language';
-import { createServer, Version } from "bedrock-protocol";
+import { createServer, Version } from 'bedrock-protocol';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -74,19 +74,22 @@ export class PowerAllay {
             )
         );
         this.main = createServer({
-            host: "127.0.0.1",
+            host: '127.0.0.1',
             port: this.getProperties().get('server-port'),
             motd: {
                 levelName: this.getProperties().get('default-world'),
-                motd: this.getProperties().get('motd'),
+                motd: this.getProperties().get('motd')
             },
             maxPlayers: this.getProperties().get('max-players') || 20,
             offline: false,
             version: VersionInfo.minecraftVersion as Version
-        })
+        });
         this.getLogger().info(
-            this.getLanguage().translate("minecraft-running-version", VersionInfo.minecraftVersion)
-        )
+            this.getLanguage().translate(
+                'minecraft-running-version',
+                VersionInfo.minecraftVersion
+            )
+        );
     }
 
     /**
