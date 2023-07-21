@@ -26,6 +26,10 @@ export class Config {
         }
     }
 
+    get(key: string) {
+        return this.config[key];
+    }
+
     async save() {
         switch (this.ConfigType) {
             case types.json:

@@ -1,4 +1,8 @@
 {
-  "server-port": 19132,
-  "motd": "PowerAllay"
+    "server-port": 19132,
+    "motd": "PowerAllay",
+    "max-players": 20,
+    "default-world": "world",
+    "language": "en_US",
+    "debug": false
 }
