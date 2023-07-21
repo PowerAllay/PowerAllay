@@ -8,7 +8,7 @@
     "build": "npx tsc",
     "start": "node .",
     "lint": "eslint --ext src/**/*.ts",
-    "dev": "npx nodemon src/PowerAllay.ts"
+    "dev": "npx nodemon src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,12 @@
     "@typescript-eslint/parser": "^6.1.0",
     "eslint": "^8.45.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/node": "^20.4.2",
+    "bedrock-protocol": "^3.30.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "prettier": "^3.0.0"
   }
 }
