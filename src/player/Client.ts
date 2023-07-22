@@ -15,7 +15,9 @@ export class Client extends Entity {
     private readonly name: string;
     private readonly server: PowerAllay;
     private readonly gamemode: number = 0;
+    private readonly permissionLevel: number;
     private readonly world: World;
+    private readonly viewDistance: number;
 
     constructor(server: PowerAllay, player: Player, data: object | null = null) {
         super();
@@ -28,6 +30,7 @@ export class Client extends Entity {
         this.gamemode = data ? data.gamemode : this.server.getProperties().get('default-gamemode');
         this.permissionLevel = data ? data.permissionLevel : ClientPermissions.PERMISSION_NORMAL;
         this.world = data ? new World(data.world) : new World(this.server.getProperties().get('default-world'));
+        this.viewDistance = data ? data.viewDistance : this.server.getProperties().get('view-distance');
     }
 
     /**
@@ -95,6 +98,13 @@ export class Client extends Entity {
      */
     getWorld(): World {
         return this.world;
+    }
+
+    /**
+     * get client view distance
+     */
+    getViewDistance(): number {
+        return this.viewDistance;
     }
 
     /**

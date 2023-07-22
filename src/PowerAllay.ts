@@ -43,6 +43,7 @@ export class PowerAllay {
     private main: any;
     private readonly players: Client[] = [];
     private events: EventEmitter;
+    private readonly DEFAULT_VIEW_DISTANCE = 16;
 
     /**
      * @constructor
@@ -71,6 +72,7 @@ export class PowerAllay {
             'default-world': 'world',
             difficulty: 2,
             'default-gamemode': 0,
+            'view-distance': this.DEFAULT_VIEW_DISTANCE,
             language: 'en_US',
             debug: false
         });
@@ -203,7 +205,7 @@ export class PowerAllay {
                                 // eslint-disable-next-line no-case-declarations
                                 const networkChunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
                                 networkChunkPublisherUpdatePacket.coordinates = new Vector3(0, 0, 0);
-                                networkChunkPublisherUpdatePacket.radius = world.getChunkRadius(); // TODO: Change to world chunk radius
+                                networkChunkPublisherUpdatePacket.radius = player.getViewDistance() * 16;
                                 networkChunkPublisherUpdatePacket.saved_chunks = [];
                                 player.sendDataPacket(networkChunkPublisherUpdatePacket);
                         }
