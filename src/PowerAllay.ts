@@ -20,8 +20,12 @@ import { Generator } from './world/generator/Generator';
 import { ClientPermissions } from './network/packets/types/ClientPermissions';
 import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
 import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionListPacket';
-import { biome_definition_list } from '@powerallay/bedrock-data';
+import {
+    biome_definition_list,
+    available_entity_identifiers
+} from '@powerallay/bedrock-data';
 import * as fs from 'fs';
+import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -227,10 +231,21 @@ export class PowerAllay {
                                         false
                                     );
                                 player.sendDataPacket(startGamePacket);
-                                // eslint-disable-next-line no-case-declarations
                                 this.getLogger().debug(
-                                    'Sending actor identifiers'
+                                    'Sending entity definitions'
                                 );
+                                // eslint-disable-next-line no-case-declarations
+                                const availableEntityIdentifiers =
+                                    new AvailableEntityPacket();
+                                availableEntityIdentifiers.data =
+                                    available_entity_identifiers;
+                                player.sendDataPacket(
+                                    availableEntityIdentifiers
+                                );
+                                this.getLogger().debug(
+                                    'Sending biome definitions'
+                                );
+                                // eslint-disable-next-line no-case-declarations
                                 const biomeDefinitionListPacket =
                                     new BiomeDefinitionListPacket();
                                 biomeDefinitionListPacket.nbt =
