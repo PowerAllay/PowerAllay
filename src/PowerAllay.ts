@@ -174,11 +174,11 @@ export class PowerAllay {
                                 break;
                             case ResourcePackResponsePacket.COMPLETED:
                                 // eslint-disable-next-line no-case-declarations
-                                const PLAYER_ID: number = EntityFactory.getNextRuntimeId();
-                                // eslint-disable-next-line no-case-declarations
-                                const startGamePacket: StartGamePacket = new StartGamePacket();
-                                startGamePacket.entityUniqueId = PLAYER_ID;
-                                startGamePacket.entityRuntimeId = PLAYER_ID;
+                                const startGamePacket: StartGamePacket =
+                                    new StartGamePacket();
+                                startGamePacket.entityUniqueId = player.getId();
+                                startGamePacket.entityRuntimeId =
+                                    player.getId();
                                 startGamePacket.playerGamemode =
                                     player.getGamemode();
                                 startGamePacket.playerPosition = {

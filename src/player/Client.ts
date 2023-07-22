@@ -5,8 +5,9 @@ import { ClientInfo } from './ClientInfo';
 import { PowerAllay } from '../PowerAllay';
 import { Gamemode } from '../network/packets/types/Gamemode';
 import { ClientPermissions } from '../network/packets/types/ClientPermissions';
+import { Entity } from '../entity/Entity';
 
-export class Client {
+export class Client extends Entity {
     private _client: Player;
     private readonly clientInfo: ClientInfo;
     private readonly uuid: string;

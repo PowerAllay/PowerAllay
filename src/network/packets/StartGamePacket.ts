@@ -1,6 +1,7 @@
 import { DataPacket } from './DataPacket';
 import { ChatRestrictionLevel } from './types/ChatRestrictionLevel';
 import { PlayerMovementSettings } from './types/PlayerMovementSettings';
+import { VersionInfo } from '../../PowerAllay';
 
 export class StartGamePacket extends DataPacket {
     public readonly isQueued: boolean = true;
@@ -108,7 +109,7 @@ export class StartGamePacket extends DataPacket {
             itemstates: this.itemStates,
             multiplayer_correlation_id: '',
             server_authoritative_inventory: false,
-            engine: 'PowerAllay',
+            engine: VersionInfo.name,
             property_data: {
                 type: 'compound',
                 name: '',
