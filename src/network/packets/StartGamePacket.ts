@@ -97,12 +97,9 @@ export class StartGamePacket extends DataPacket {
             world_name: this.worldName,
             premium_world_template_id: '00000000-0000-0000-0000-000000000000',
             is_trial: false,
-            movement_authority:
-                this.playerMovementSettings.getMovementAuthority(),
-            rewind_history_size:
-                this.playerMovementSettings.getRewindHistorySize(),
-            server_authoritative_block_breaking:
-                this.playerMovementSettings.isServerAuthoritativeBlockBreaking(),
+            movement_authority: this.playerMovementSettings.getMovementAuthority(),
+            rewind_history_size: this.playerMovementSettings.getRewindHistorySize(),
+            server_authoritative_block_breaking: this.playerMovementSettings.isServerAuthoritativeBlockBreaking(),
             current_tick: [0, 0],
             enchantment_seed: 0,
             block_properties: [],

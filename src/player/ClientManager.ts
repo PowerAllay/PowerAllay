@@ -21,18 +21,11 @@ export class ClientManager {
 
     public getPlayer(player: Player): Client {
         const playerName = player.profile.name;
-        const playerPath = path.join(
-            this.server.getDataPath(),
-            'players',
-            `${playerName}.dat`
-        );
+        const playerPath = path.join(this.server.getDataPath(), 'players', `${playerName}.dat`);
         if (!fs.existsSync(playerPath)) {
             this.server.getLogger().info('Creating player data...');
             const client = new Client(this.server, player);
-            this.server.callEvent(
-                Events.PLAYER_JOIN_EVENT,
-                new PlayerJoinEvent(client, true)
-            );
+            this.server.callEvent(Events.PLAYER_JOIN_EVENT, new PlayerJoinEvent(client, true));
             this.saveData(client);
             return client;
         } else {
@@ -41,30 +34,17 @@ export class ClientManager {
     }
 
     private saveData(player: Client): void {
-        const playerPath = path.join(
-            this.server.getDataPath(),
-            'players',
-            `${player.getClientInfo().getName()}.dat`
-        );
-        const contents = zlib.deflateSync(
-            Buffer.from(JSON.stringify(player.getSaveData()))
-        );
+        const playerPath = path.join(this.server.getDataPath(), 'players', `${player.getClientInfo().getName()}.dat`);
+        const contents = zlib.deflateSync(Buffer.from(JSON.stringify(player.getSaveData())));
         fs.writeFileSync(playerPath, contents);
     }
 
     private loadData(player: Player): Client {
-        const playerPath = path.join(
-            this.server.getDataPath(),
-            'players',
-            `${player.profile.name}.dat`
-        );
+        const playerPath = path.join(this.server.getDataPath(), 'players', `${player.profile.name}.dat`);
         const contents = fs.readFileSync(playerPath);
         const data = JSON.parse(zlib.inflateSync(contents).toString());
         const client = new Client(this.server, player, data);
-        this.server.callEvent(
-            Events.PLAYER_JOIN_EVENT,
-            new PlayerJoinEvent(client, false)
-        );
+        this.server.callEvent(Events.PLAYER_JOIN_EVENT, new PlayerJoinEvent(client, false));
         return client;
     }
 }

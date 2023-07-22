@@ -14,26 +14,16 @@ export class Client extends Entity {
     private readonly name: string;
     private readonly server: PowerAllay;
     private readonly gamemode: number = 0;
-    constructor(
-        server: PowerAllay,
-        player: Player,
-        data: object | null = null
-    ) {
+    constructor(server: PowerAllay, player: Player, data: object | null = null) {
         super();
         this._client = player;
         const playerData = player.getUserData();
-        this.clientInfo = data
-            ? new ClientInfo(data.clientInfo.xuid, data.clientInfo.name)
-            : new ClientInfo(player.profile.xuid, player.profile.name);
+        this.clientInfo = data ? new ClientInfo(data.clientInfo.xuid, data.clientInfo.name) : new ClientInfo(player.profile.xuid, player.profile.name);
         this.uuid = data ? data.uuid : player.profile.xuid;
         this.name = data ? data.name : player.profile.name;
         this.server = server;
-        this.gamemode = data
-            ? data.gamemode
-            : this.server.getProperties().get('default-gamemode');
-        this.permissionLevel = data
-            ? data.permissionLevel
-            : ClientPermissions.PERMISSION_NORMAL;
+        this.gamemode = data ? data.gamemode : this.server.getProperties().get('default-gamemode');
+        this.permissionLevel = data ? data.permissionLevel : ClientPermissions.PERMISSION_NORMAL;
     }
 
     /**

@@ -19,14 +19,10 @@ export class Config {
     load() {
         switch (this.ConfigType) {
             case Config.JSON:
-                this.config = JSON.parse(
-                    fs.readFileSync(this.filename, 'utf-8')
-                );
+                this.config = JSON.parse(fs.readFileSync(this.filename, 'utf-8'));
                 break;
             case Config.YAML:
-                this.config = YAML.parse(
-                    fs.readFileSync(this.filename, 'utf-8')
-                );
+                this.config = YAML.parse(fs.readFileSync(this.filename, 'utf-8'));
                 break;
         }
     }
@@ -38,10 +34,7 @@ export class Config {
     async save() {
         switch (this.ConfigType) {
             case Config.JSON:
-                fs.writeFileSync(
-                    this.filename,
-                    JSON.stringify(this.config, null, 4)
-                );
+                fs.writeFileSync(this.filename, JSON.stringify(this.config, null, 4));
                 break;
             case Config.YAML:
                 fs.writeFileSync(this.filename, YAML.stringify(this.config));

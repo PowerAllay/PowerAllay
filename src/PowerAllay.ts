@@ -14,18 +14,13 @@ import { ClientInfo } from './player/ClientInfo';
 import { ResourcePackResponsePacket } from './network/packets/ResourcePackResponsePacket';
 import { ResourcePackStackPacket } from './network/packets/ResourcePackStackPacket';
 import { StartGamePacket } from './network/packets/StartGamePacket';
-import { EntityFactory } from './entity/EntityFactory';
 import { Dimension } from './world/dimension/Dimension';
 import { Generator } from './world/generator/Generator';
-import { ClientPermissions } from './network/packets/types/ClientPermissions';
 import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
 import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionListPacket';
-import {
-    biome_definition_list,
-    available_entity_identifiers
-} from '@powerallay/bedrock-data';
-import * as fs from 'fs';
+import { biome_definition_list, available_entity_identifiers, creative_content } from '@powerallay/bedrock-data';
 import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
+import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -62,20 +57,16 @@ export class PowerAllay {
      */
     private initProperties() {
         this.getLogger().info('Loading server properties...');
-        this.properties = new Config(
-            `${this.getDataPath()}/server.json`,
-            Config.JSON,
-            {
-                'server-port': 19132,
-                motd: 'PowerAllay',
-                'max-players': 20,
-                'default-world': 'world',
-                difficulty: 2,
-                'default-gamemode': 0,
-                language: 'en_US',
-                debug: false
-            }
-        );
+        this.properties = new Config(`${this.getDataPath()}/server.json`, Config.JSON, {
+            'server-port': 19132,
+            motd: 'PowerAllay',
+            'max-players': 20,
+            'default-world': 'world',
+            difficulty: 2,
+            'default-gamemode': 0,
+            language: 'en_US',
+            debug: false
+        });
     }
 
     /**
@@ -85,23 +76,11 @@ export class PowerAllay {
      */
     private initLanguage() {
         this.language = new Language(this);
-        this.getLogger().info(
-            this.getLanguage().translate(
-                'selected-language',
-                this.language.getLanguage(),
-                this.language.getName()
-            )
-        );
+        this.getLogger().info(this.getLanguage().translate('selected-language', this.language.getLanguage(), this.language.getName()));
     }
 
     async start() {
-        this.getLogger().info(
-            this.getLanguage().translate(
-                'running-info',
-                VersionInfo.name,
-                VersionInfo.version
-            )
-        );
+        this.getLogger().info(this.getLanguage().translate('running-info', VersionInfo.name, VersionInfo.version));
         this.main = createServer({
             host: '127.0.0.1',
             port: this.getProperties().get('server-port'),
@@ -113,42 +92,17 @@ export class PowerAllay {
             offline: false,
             version: ProtocolInfo.MINECRAFT_VERSION as Version
         });
-        this.getLogger().info(
-            this.getLanguage().translate(
-                'minecraft-running-version',
-                ProtocolInfo.MINECRAFT_VERSION
-            )
-        );
+        this.getLogger().info(this.getLanguage().translate('minecraft-running-version', ProtocolInfo.MINECRAFT_VERSION));
         this.main.on('connect', (client: Player) => {
             client.on('login', () => {
-                this.getLogger().info(
-                    this.getLanguage().translate(
-                        'player-login',
-                        client.profile.name
-                    )
-                );
-                this.events.emit(
-                    Events.PLAYER_LOGIN_EVENT,
-                    new PlayerLoginEvent(
-                        new ClientInfo(client.profile.xuid, client.profile.name)
-                    )
-                );
+                this.getLogger().info(this.getLanguage().translate('player-login', client.profile.name));
+                this.events.emit(Events.PLAYER_LOGIN_EVENT, new PlayerLoginEvent(new ClientInfo(client.profile.xuid, client.profile.name)));
                 if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
                     client.disconnect('Outdated client!');
-                    this.getLogger().info(
-                        this.getLanguage().translate(
-                            'outdated-client',
-                            client.profile.name
-                        )
-                    );
+                    this.getLogger().info(this.getLanguage().translate('outdated-client', client.profile.name));
                 } else if (client.version > ProtocolInfo.CURRENT_PROTOCOL) {
                     client.disconnect('Outdated server!');
-                    this.getLogger().info(
-                        this.getLanguage().translate(
-                            'outdated-server',
-                            client.profile.name
-                        )
-                    );
+                    this.getLogger().info(this.getLanguage().translate('outdated-server', client.profile.name));
                 }
             });
             client.on('join', () => {
@@ -158,12 +112,7 @@ export class PowerAllay {
             });
             client.on('close', () => {
                 const player = this.clientManager.getPlayer(client);
-                this.getLogger().info(
-                    this.getLanguage().translate(
-                        'player-logout',
-                        client.profile.name
-                    )
-                );
+                this.getLogger().info(this.getLanguage().translate('player-logout', client.profile.name));
                 this.players.splice(this.players.indexOf(player), 1);
             });
             client.on('spawn', () => {});
@@ -175,22 +124,15 @@ export class PowerAllay {
                         // @ts-ignore
                         switch (packet.data.params.response_status) {
                             case ResourcePackResponsePacket.HAVE_ALL_PACK:
-                                player.sendDataPacket(
-                                    new ResourcePackStackPacket()
-                                );
+                                player.sendDataPacket(new ResourcePackStackPacket());
                                 break;
                             case ResourcePackResponsePacket.COMPLETED:
-                                this.getLogger().debug(
-                                    'Preparing StartGamePacket'
-                                );
+                                this.getLogger().debug('Preparing StartGamePacket');
                                 // eslint-disable-next-line no-case-declarations
-                                const startGamePacket: StartGamePacket =
-                                    new StartGamePacket();
+                                const startGamePacket: StartGamePacket = new StartGamePacket();
                                 startGamePacket.entityUniqueId = player.getId();
-                                startGamePacket.entityRuntimeId =
-                                    player.getId();
-                                startGamePacket.playerGamemode =
-                                    player.getGamemode();
+                                startGamePacket.entityRuntimeId = player.getId();
+                                startGamePacket.playerGamemode = player.getGamemode();
                                 startGamePacket.playerPosition = {
                                     x: 0,
                                     y: 0,
@@ -205,10 +147,8 @@ export class PowerAllay {
                                 startGamePacket.biomeName = 'Plains'; //TODO: Add more biomes
                                 startGamePacket.dimension = Dimension.OVERWORLD;
                                 startGamePacket.generator = Generator.FLAT; //TODO: Add default generator to config
-                                startGamePacket.worldGamemode =
-                                    player.getGamemode();
-                                startGamePacket.difficulty =
-                                    this.getProperties().get('difficulty');
+                                startGamePacket.worldGamemode = player.getGamemode();
+                                startGamePacket.difficulty = this.getProperties().get('difficulty');
                                 startGamePacket.spawnPosition = {
                                     x: 0,
                                     y: 0,
@@ -218,41 +158,25 @@ export class PowerAllay {
                                 startGamePacket.gameRules = []; //TODO: Add game rules
                                 startGamePacket.itemStates = []; //TODO: Add item states
                                 startGamePacket.experiments = [];
-                                startGamePacket.experimentsPreviouslyUsed =
-                                    false;
-                                startGamePacket.permissionLevel =
-                                    player.getPermissionLevel();
-                                startGamePacket.worldName =
-                                    this.getProperties().get('default-world');
-                                startGamePacket.playerMovementSettings =
-                                    new PlayerMovementSettings(
-                                        PlayerMovementSettings.SERVER,
-                                        0,
-                                        false
-                                    );
+                                startGamePacket.experimentsPreviouslyUsed = false;
+                                startGamePacket.permissionLevel = player.getPermissionLevel();
+                                startGamePacket.worldName = this.getProperties().get('default-world');
+                                startGamePacket.playerMovementSettings = new PlayerMovementSettings(PlayerMovementSettings.SERVER, 0, false);
                                 player.sendDataPacket(startGamePacket);
-                                this.getLogger().debug(
-                                    'Sending entity definitions'
-                                );
+                                this.getLogger().debug('Sending entity definitions');
                                 // eslint-disable-next-line no-case-declarations
-                                const availableEntityIdentifiers =
-                                    new AvailableEntityPacket();
-                                availableEntityIdentifiers.data =
-                                    available_entity_identifiers;
-                                player.sendDataPacket(
-                                    availableEntityIdentifiers
-                                );
-                                this.getLogger().debug(
-                                    'Sending biome definitions'
-                                );
+                                const availableEntityIdentifiers = new AvailableEntityPacket();
+                                availableEntityIdentifiers.nbt = available_entity_identifiers;
+                                player.sendDataPacket(availableEntityIdentifiers);
+                                this.getLogger().debug('Sending biome definitions');
                                 // eslint-disable-next-line no-case-declarations
-                                const biomeDefinitionListPacket =
-                                    new BiomeDefinitionListPacket();
-                                biomeDefinitionListPacket.nbt =
-                                    biome_definition_list;
-                                player.sendDataPacket(
-                                    biomeDefinitionListPacket
-                                );
+                                const biomeDefinitionListPacket = new BiomeDefinitionListPacket();
+                                biomeDefinitionListPacket.nbt = biome_definition_list;
+                                player.sendDataPacket(biomeDefinitionListPacket);
+                                // eslint-disable-next-line no-case-declarations
+                                const creativeContentPacket = new CreativeContentPacket();
+                                creativeContentPacket.items = creative_content;
+                                player.sendDataPacket(creativeContentPacket);
                         }
                         break;
                 }

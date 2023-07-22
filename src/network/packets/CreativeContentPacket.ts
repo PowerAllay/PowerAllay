@@ -1,18 +1,18 @@
 import { DataPacket } from './DataPacket';
 
-export class BiomeDefinitionListPacket extends DataPacket {
+export class CreativeContentPacket extends DataPacket {
     public readonly isQueued: boolean = true;
-    public nbt: any[] = [];
+    public items: object = {};
 
     constructor() {
-        super('biome_definition_list');
+        super('creative_content');
     }
 
     decode(): void {}
 
     encode(): object {
         return {
-            nbt: this.nbt
+            items: this.items
         };
     }
 }
