@@ -132,7 +132,7 @@ export class PowerAllay {
                                 player.sendDataPacket(new ResourcePackStackPacket());
                                 break;
                             case ResourcePackResponsePacket.COMPLETED:
-                                let world = player.getWorld();
+                                const world = player.getWorld();
 
                                 this.getLogger().debug('Preparing StartGamePacket');
                                 // eslint-disable-next-line no-case-declarations
