@@ -23,6 +23,7 @@ import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
 import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
 import { SetCommandsEnablePacket } from './network/packets/SetCommandsEnablePacket';
 import { UpdateAttributesPacket } from './network/packets/UpdateAttributesPacket';
+import { ItemComponentPacket } from './network/packets/ItemComponentPacket';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -188,6 +189,10 @@ export class PowerAllay {
                                 updateAttributesPacket.runtime_entity_id = player.getId();
                                 updateAttributesPacket.attributes = update_attributes;
                                 updateAttributesPacket.tick = 0;
+                                // eslint-disable-next-line no-case-declarations
+                                const itemComponentPacket = new ItemComponentPacket();
+                                itemComponentPacket.items = [];
+                                player.sendDataPacket(itemComponentPacket);
                         }
                         break;
                 }
