@@ -3,9 +3,9 @@ import { Player } from 'bedrock-protocol';
 import { DataPacket } from '../network/packets/DataPacket';
 import { ClientInfo } from './ClientInfo';
 import { PowerAllay } from '../PowerAllay';
-import { Gamemode } from '../network/packets/types/Gamemode';
 import { ClientPermissions } from '../network/packets/types/ClientPermissions';
 import { Entity } from '../entity/Entity';
+import { ChunkRadiusUpdatePacket } from '../network/packets/ChunkRadiusUpdatePacket';
 
 export class Client extends Entity {
     private _client: Player;
@@ -72,6 +72,17 @@ export class Client extends Entity {
      */
     getPermissionLevel(): number {
         return this.permissionLevel;
+    }
+
+    /**
+     * set chunk radius
+     * 
+     * @param radius
+     */
+    setChunkRadius(radius: number): void {
+        const packet = new ChunkRadiusUpdatePacket();
+        packet.radius = radius;
+        this.sendDataPacket(packet);
     }
 
     /**

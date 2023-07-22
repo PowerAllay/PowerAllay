@@ -193,6 +193,7 @@ export class PowerAllay {
                                 const itemComponentPacket = new ItemComponentPacket();
                                 itemComponentPacket.items = [];
                                 player.sendDataPacket(itemComponentPacket);
+                                player.setChunkRadius(4); //TODO: Change to world chunk radius
                         }
                         break;
                 }
