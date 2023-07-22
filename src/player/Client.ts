@@ -76,7 +76,7 @@ export class Client extends Entity {
 
     /**
      * set chunk radius
-     * 
+     *
      * @param radius
      */
     setChunkRadius(radius: number): void {
@@ -84,6 +84,11 @@ export class Client extends Entity {
         packet.radius = radius;
         this.sendDataPacket(packet);
     }
+
+    /**
+     * sync available commands
+     */
+    syncAvailableCommands(): void {}
 
     /**
      * Get client name
