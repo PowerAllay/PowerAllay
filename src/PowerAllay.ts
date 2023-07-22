@@ -18,10 +18,11 @@ import { Dimension } from './world/dimension/Dimension';
 import { Generator } from './world/generator/Generator';
 import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
 import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionListPacket';
-import { biome_definition_list, available_entity_identifiers, creative_content } from '@powerallay/bedrock-data';
+import { biome_definition_list, available_entity_identifiers, creative_content, update_attributes } from '@powerallay/bedrock-data';
 import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
 import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
-import {SetCommandsEnablePacket} from "./network/packets/SetCommandsEnablePacket";
+import { SetCommandsEnablePacket } from './network/packets/SetCommandsEnablePacket';
+import { UpdateAttributesPacket } from './network/packets/UpdateAttributesPacket';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -182,6 +183,11 @@ export class PowerAllay {
                                 const setCommandsEnabledPacket = new SetCommandsEnablePacket();
                                 setCommandsEnabledPacket.value = true;
                                 player.sendDataPacket(setCommandsEnabledPacket);
+                                // eslint-disable-next-line no-case-declarations
+                                const updateAttributesPacket = new UpdateAttributesPacket();
+                                updateAttributesPacket.runtime_entity_id = player.getId();
+                                updateAttributesPacket.attributes = update_attributes;
+                                updateAttributesPacket.tick = 0;
                         }
                         break;
                 }

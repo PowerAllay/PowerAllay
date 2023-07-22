@@ -1,4 +1,4 @@
-import {DataPacket} from "./DataPacket";
+import { DataPacket } from './DataPacket';
 
 export class SetCommandsEnablePacket extends DataPacket {
     public readonly isQueued: boolean = true;
@@ -8,12 +8,11 @@ export class SetCommandsEnablePacket extends DataPacket {
         super('set_commands_enabled');
     }
 
-    decode(): void {
-    }
+    decode(): void {}
 
     encode(): object {
         return {
             enabled: this.value
-        }
+        };
     }
 }
