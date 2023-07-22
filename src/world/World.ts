@@ -1,5 +1,6 @@
 import { Vector3 } from '../math/Vector3';
 import { Generator } from './generator/Generator';
+import { Position } from './Position';
 
 export class World {
     public static readonly DIFFICULTY_PEACEFUL = 0;
@@ -7,9 +8,9 @@ export class World {
     public static readonly DIFFICULTY_NORMAL = 2;
     public static readonly DIFFICULTY_HARD = 3;
 
-    private chunkRadius = 4;
+    private chunkRadius = 64;
     private difficulty = 1;
-    private spawnPosition: Vector3 = new Vector3(0, 0, 0);
+    private spawnPosition: Position = new Position(0, 0, 0, this);
     private generator: number = Generator.FLAT;
     private time = 0;
 
@@ -27,7 +28,7 @@ export class World {
         return this.difficulty;
     }
 
-    getSpawnPosition(): Vector3 {
+    getSpawnPosition(): Position {
         return this.spawnPosition;
     }
 

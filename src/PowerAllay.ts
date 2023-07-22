@@ -27,6 +27,7 @@ import { ItemComponentPacket } from './network/packets/ItemComponentPacket';
 import { NetworkChunkPublisherUpdatePacket } from './network/packets/NetworkChunkPublisherUpdatePacket';
 import { Vector3 } from './math/Vector3';
 import { ClientCacheStatusPacket } from './network/packets/ClientCacheStatusPacket';
+import { World } from './world/World';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -157,11 +158,7 @@ export class PowerAllay {
                                 startGamePacket.generator = Generator.FLAT; //TODO: Add default generator to config
                                 startGamePacket.worldGamemode = player.getGamemode();
                                 startGamePacket.difficulty = this.getProperties().get('difficulty');
-                                startGamePacket.spawnPosition = {
-                                    x: 0,
-                                    y: 0,
-                                    z: 0
-                                };
+                                startGamePacket.spawnPosition = world.getSpawnPosition().asVector3().toJSON();
                                 startGamePacket.AchievementsDisabled = true;
                                 startGamePacket.gameRules = []; //TODO: Add game rules
                                 startGamePacket.itemStates = []; //TODO: Add item states
@@ -198,7 +195,7 @@ export class PowerAllay {
                                 const itemComponentPacket = new ItemComponentPacket();
                                 itemComponentPacket.items = [];
                                 player.sendDataPacket(itemComponentPacket);
-                                player.setChunkRadius(4); //TODO: Change to world chunk radius
+                                player.setChunkRadius(world.getChunkRadius()); //TODO: Change to world chunk radius
                                 // eslint-disable-next-line no-case-declarations
                                 const clientCacheStatusPacket = new ClientCacheStatusPacket();
                                 clientCacheStatusPacket.enabled = true;
