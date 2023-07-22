@@ -6,6 +6,7 @@ import { PowerAllay } from '../PowerAllay';
 import { ClientPermissions } from '../network/packets/types/ClientPermissions';
 import { Entity } from '../entity/Entity';
 import { ChunkRadiusUpdatePacket } from '../network/packets/ChunkRadiusUpdatePacket';
+import { World } from '../world/World';
 
 export class Client extends Entity {
     private _client: Player;
@@ -14,6 +15,8 @@ export class Client extends Entity {
     private readonly name: string;
     private readonly server: PowerAllay;
     private readonly gamemode: number = 0;
+    private readonly world: World;
+
     constructor(server: PowerAllay, player: Player, data: object | null = null) {
         super();
         this._client = player;
@@ -24,6 +27,7 @@ export class Client extends Entity {
         this.server = server;
         this.gamemode = data ? data.gamemode : this.server.getProperties().get('default-gamemode');
         this.permissionLevel = data ? data.permissionLevel : ClientPermissions.PERMISSION_NORMAL;
+        this.world = data ? data.world : new World(this.server.getProperties().get('default-world'));
     }
 
     /**
@@ -42,7 +46,8 @@ export class Client extends Entity {
             uuid: this.uuid,
             name: this.name,
             gamemode: this.gamemode,
-            permissionLevel: this.permissionLevel
+            permissionLevel: this.permissionLevel,
+            world: this.getWorld().getDisplayName()
         };
     }
 
@@ -83,6 +88,13 @@ export class Client extends Entity {
         const packet = new ChunkRadiusUpdatePacket();
         packet.radius = radius;
         this.sendDataPacket(packet);
+    }
+
+    /**
+     * get client world
+     */
+    getWorld(): World {
+        return this.world;
     }
 
     /**

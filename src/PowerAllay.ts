@@ -24,6 +24,8 @@ import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
 import { SetCommandsEnablePacket } from './network/packets/SetCommandsEnablePacket';
 import { UpdateAttributesPacket } from './network/packets/UpdateAttributesPacket';
 import { ItemComponentPacket } from './network/packets/ItemComponentPacket';
+import { NetworkChunkPublisherUpdatePacket } from './network/packets/NetworkChunkPublisherUpdatePacket';
+import { Vector3 } from './math/Vector3';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -130,6 +132,8 @@ export class PowerAllay {
                                 player.sendDataPacket(new ResourcePackStackPacket());
                                 break;
                             case ResourcePackResponsePacket.COMPLETED:
+                                let world = player.getWorld();
+
                                 this.getLogger().debug('Preparing StartGamePacket');
                                 // eslint-disable-next-line no-case-declarations
                                 const startGamePacket: StartGamePacket = new StartGamePacket();
@@ -194,6 +198,12 @@ export class PowerAllay {
                                 itemComponentPacket.items = [];
                                 player.sendDataPacket(itemComponentPacket);
                                 player.setChunkRadius(4); //TODO: Change to world chunk radius
+                                // eslint-disable-next-line no-case-declarations
+                                const networkChunkPublisherUpdatePacket = new NetworkChunkPublisherUpdatePacket();
+                                networkChunkPublisherUpdatePacket.coordinates = new Vector3(0, 0, 0);
+                                networkChunkPublisherUpdatePacket.radius = 4; // TODO: Change to world chunk radius
+                                networkChunkPublisherUpdatePacket.saved_chunks = [];
+                                player.sendDataPacket(networkChunkPublisherUpdatePacket);
                         }
                         break;
                 }

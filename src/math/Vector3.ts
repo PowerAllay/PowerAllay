@@ -1,5 +1,4 @@
 export class Vector3 {
-
     constructor(
         public x: number,
         public y: number,
@@ -16,5 +15,13 @@ export class Vector3 {
 
     getZ(): number {
         return this.z;
+    }
+
+    toJSON(): object {
+        return {
+            x: this.x,
+            y: this.y,
+            z: this.z
+        };
     }
 }
