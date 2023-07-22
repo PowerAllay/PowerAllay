@@ -27,7 +27,7 @@ export class Client extends Entity {
         this.server = server;
         this.gamemode = data ? data.gamemode : this.server.getProperties().get('default-gamemode');
         this.permissionLevel = data ? data.permissionLevel : ClientPermissions.PERMISSION_NORMAL;
-        this.world = data ? data.world : new World(this.server.getProperties().get('default-world'));
+        this.world = data ? new World(data.world) : new World(this.server.getProperties().get('default-world'));
     }
 
     /**

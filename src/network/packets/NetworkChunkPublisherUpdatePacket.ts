@@ -1,11 +1,12 @@
 import { DataPacket } from './DataPacket';
 import { Vector3 } from '../../math/Vector3';
+import { ChunkPosition } from './types/ChunkPosition';
 
 export class NetworkChunkPublisherUpdatePacket extends DataPacket {
     public readonly isQueued: boolean = true;
     public coordinates: Vector3;
     public radius: number;
-    public saved_chunks: Vector3[];
+    public saved_chunks: ChunkPosition[];
 
     constructor() {
         super('network_chunk_publisher_update');
