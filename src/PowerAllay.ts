@@ -11,8 +11,8 @@ import { PlayerLoginEvent } from './events/player/PlayerLoginEvent';
 import { Events } from './events/AllayEvent';
 import { ClientManager } from './player/ClientManager';
 import { ClientInfo } from './player/ClientInfo';
-import {ResourcePackResponsePacket} from "./network/packets/ResourcePackResponsePacket";
-import {ResourcePackStackPacket} from "./network/packets/ResourcePackStackPacket";
+import { ResourcePackResponsePacket } from './network/packets/ResourcePackResponsePacket';
+import { ResourcePackStackPacket } from './network/packets/ResourcePackStackPacket';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -151,10 +151,8 @@ export class PowerAllay {
                 );
                 this.players.splice(this.players.indexOf(player), 1);
             });
-            client.on('spawn', () => {
-
-            });
-            client.on('packet', packet => {
+            client.on('spawn', () => {});
+            client.on('packet', (packet) => {
                 const player = this.clientManager.getPlayer(client);
                 // @ts-ignore
                 switch (packet.data.name) {
@@ -162,10 +160,12 @@ export class PowerAllay {
                         // @ts-ignore
                         switch (packet.data.params.response_status) {
                             case ResourcePackResponsePacket.HAVE_ALL_PACK:
-                                player.sendDataPacket(new ResourcePackStackPacket());
+                                player.sendDataPacket(
+                                    new ResourcePackStackPacket()
+                                );
                                 break;
                         }
-                        break
+                        break;
                 }
             });
         });

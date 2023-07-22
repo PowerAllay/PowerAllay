@@ -1,4 +1,4 @@
-import {DataPacket} from "./DataPacket";
+import { DataPacket } from './DataPacket';
 
 export class ResourcePackStackPacket extends DataPacket {
     public readonly isQueued: boolean = true;
@@ -13,8 +13,7 @@ export class ResourcePackStackPacket extends DataPacket {
         super('resource_pack_stack');
     }
 
-    decode(): void {
-    }
+    decode(): void {}
 
     encode(): object {
         return {
