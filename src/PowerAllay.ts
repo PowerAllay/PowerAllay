@@ -1,4 +1,4 @@
-import { Config, types } from './utils/Config';
+import { Config } from './utils/Config';
 import * as path from 'path';
 import { BaseLogger } from './utils/BaseLogger';
 import { Language } from './languages/Language';
@@ -11,8 +11,7 @@ import { PlayerLoginEvent } from './events/player/PlayerLoginEvent';
 
 export const VersionInfo = {
     name: 'PowerAllay',
-    version: '1.0.0',
-    minecraftVersion: '1.20.10'
+    version: '1.0.0'
 };
 
 export class PowerAllay {
@@ -45,7 +44,7 @@ export class PowerAllay {
         this.getLogger().info('Loading server properties...');
         this.properties = new Config(
             `${this.getDataPath()}/server.json`,
-            types.json,
+            Config.JSON,
             {
                 'server-port': 19132,
                 motd: 'PowerAllay',
@@ -90,12 +89,12 @@ export class PowerAllay {
             },
             maxPlayers: this.getProperties().get('max-players') || 20,
             offline: false,
-            version: VersionInfo.minecraftVersion as Version
+            version: ProtocolInfo.MINECRAFT_VERSION as Version
         });
         this.getLogger().info(
             this.getLanguage().translate(
                 'minecraft-running-version',
-                VersionInfo.minecraftVersion
+                ProtocolInfo.MINECRAFT_VERSION
             )
         );
         this.main.on('connect', (client: Player) => {

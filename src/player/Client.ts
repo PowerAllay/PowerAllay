@@ -12,6 +12,7 @@ export class Client {
         this._client = player;
         const playerData = player.getUserData();
         // @ts-ignore
+        // prettier-ignore
         this.clientInfo = new ClientInfo(player.profile.xuid, playerData.displayName);
         // @ts-ignore
         this.uuid = playerData.identity;
