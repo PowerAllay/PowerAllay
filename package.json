@@ -34,6 +34,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@powerallay/bedrock-data": "github:PowerAllay/BedrockData",
     "@types/node": "^20.4.2",
     "bedrock-protocol": "^3.30.0",
     "events": "^3.3.0",

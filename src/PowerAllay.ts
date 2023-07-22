@@ -19,6 +19,9 @@ import { Dimension } from './world/dimension/Dimension';
 import { Generator } from './world/generator/Generator';
 import { ClientPermissions } from './network/packets/types/ClientPermissions';
 import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
+import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionListPacket';
+import { biome_definition_list } from '@powerallay/bedrock-data';
+import * as fs from 'fs';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -173,6 +176,9 @@ export class PowerAllay {
                                 );
                                 break;
                             case ResourcePackResponsePacket.COMPLETED:
+                                this.getLogger().debug(
+                                    'Preparing StartGamePacket'
+                                );
                                 // eslint-disable-next-line no-case-declarations
                                 const startGamePacket: StartGamePacket =
                                     new StartGamePacket();
@@ -221,6 +227,17 @@ export class PowerAllay {
                                         false
                                     );
                                 player.sendDataPacket(startGamePacket);
+                                // eslint-disable-next-line no-case-declarations
+                                this.getLogger().debug(
+                                    'Sending actor identifiers'
+                                );
+                                const biomeDefinitionListPacket =
+                                    new BiomeDefinitionListPacket();
+                                biomeDefinitionListPacket.nbt =
+                                    biome_definition_list;
+                                player.sendDataPacket(
+                                    biomeDefinitionListPacket
+                                );
                         }
                         break;
                 }

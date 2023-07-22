@@ -19,6 +19,7 @@ export class Client extends Entity {
         player: Player,
         data: object | null = null
     ) {
+        super();
         this._client = player;
         const playerData = player.getUserData();
         this.clientInfo = data
