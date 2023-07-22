@@ -59,7 +59,16 @@ export class Client {
         return this._client;
     }
 
+    /**
+     * Get client name
+     *
+     * @param packet
+     */
     sendDataPacket(packet: DataPacket): void {
-        this._client.queue(packet.name, packet.encode());
+        if (packet.isQueued) {
+            this._client.queue(packet.name, packet.encode());
+        } else {
+            this._client.write(packet.name, packet.encode());
+        }
     }
 }

@@ -1,7 +1,7 @@
 import { DataPacket } from './DataPacket';
 
 export class ResourcePacksInfoPacket extends DataPacket {
-    public readonly name: string = 'resource_packs_info';
+    public readonly isQueued: boolean = true;
     public mustAccept: boolean = false;
     public hasScripts: boolean = false;
     public behaviourPackInfos: any[] = [];

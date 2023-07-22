@@ -36,7 +36,6 @@ export class ClientManager {
             this.saveData(client);
             return client;
         } else {
-            this.server.getLogger().info('Loading player data...');
             return this.loadData(player);
         }
     }
