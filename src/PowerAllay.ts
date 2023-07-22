@@ -21,6 +21,7 @@ import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionList
 import { biome_definition_list, available_entity_identifiers, creative_content } from '@powerallay/bedrock-data';
 import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
 import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
+import {SetCommandsEnablePacket} from "./network/packets/SetCommandsEnablePacket";
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -177,6 +178,10 @@ export class PowerAllay {
                                 const creativeContentPacket = new CreativeContentPacket();
                                 creativeContentPacket.items = creative_content;
                                 player.sendDataPacket(creativeContentPacket);
+                                // eslint-disable-next-line no-case-declarations
+                                const setCommandsEnabledPacket = new SetCommandsEnablePacket();
+                                setCommandsEnabledPacket.value = true;
+                                player.sendDataPacket(setCommandsEnabledPacket);
                         }
                         break;
                 }
