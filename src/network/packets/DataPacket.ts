@@ -1,7 +1,10 @@
-export class DataPacket {
+export abstract class DataPacket {
     public readonly name: string;
 
-    encode(): object {
-        return {};
+    protected constructor(name: string) {
+        this.name = name;
     }
+
+    abstract encode(): object;
+    abstract decode(): void;
 }

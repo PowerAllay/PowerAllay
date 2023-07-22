@@ -7,6 +7,10 @@ export class ResourcePacksInfoPacket extends DataPacket {
     public behaviourPackInfos: any[] = [];
     public resourcePackInfos: any[] = [];
 
+    constructor() {
+        super('resource_packs_info');
+    }
+
     encode(): object {
         return {
             must_accept: this.mustAccept,
@@ -15,4 +19,6 @@ export class ResourcePacksInfoPacket extends DataPacket {
             texture_packs: this.resourcePackInfos
         };
     }
+
+    decode(): void {}
 }

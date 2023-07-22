@@ -8,6 +8,7 @@ import { ResourcePacksInfoPacket } from './network/packets/ResourcePacksInfoPack
 import { ProtocolInfo } from './network/packets/ProtocolInfo';
 import { EventEmitter } from 'node:events';
 import { PlayerLoginEvent } from './events/player/PlayerLoginEvent';
+import { Events } from './events/AllayEvent';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -107,7 +108,7 @@ export class PowerAllay {
                     )
                 );
                 this.events.emit(
-                    'PlayerLoginEvent',
+                    Events.PLAYER_LOGIN_EVENT,
                     new PlayerLoginEvent(player)
                 );
                 if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
