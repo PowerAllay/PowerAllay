@@ -3,6 +3,8 @@
     "motd": "PowerAllay",
     "max-players": 20,
     "default-world": "world",
+    "difficulty": 2,
+    "default-gamemode": 0,
     "language": "en_US",
     "debug": false
 }

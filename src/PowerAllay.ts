@@ -13,6 +13,12 @@ import { ClientManager } from './player/ClientManager';
 import { ClientInfo } from './player/ClientInfo';
 import { ResourcePackResponsePacket } from './network/packets/ResourcePackResponsePacket';
 import { ResourcePackStackPacket } from './network/packets/ResourcePackStackPacket';
+import { StartGamePacket } from './network/packets/StartGamePacket';
+import { EntityFactory } from './entity/EntityFactory';
+import { Dimension } from './world/dimension/Dimension';
+import { Generator } from './world/generator/Generator';
+import { ClientPermissions } from './network/packets/types/ClientPermissions';
+import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -57,6 +63,8 @@ export class PowerAllay {
                 motd: 'PowerAllay',
                 'max-players': 20,
                 'default-world': 'world',
+                difficulty: 2,
+                'default-gamemode': 0,
                 language: 'en_US',
                 debug: false
             }
@@ -164,11 +172,64 @@ export class PowerAllay {
                                     new ResourcePackStackPacket()
                                 );
                                 break;
+                            case ResourcePackResponsePacket.COMPLETED:
+                                // eslint-disable-next-line no-case-declarations
+                                const PLAYER_ID: number = EntityFactory.getNextRuntimeId();
+                                // eslint-disable-next-line no-case-declarations
+                                const startGamePacket: StartGamePacket = new StartGamePacket();
+                                startGamePacket.entityUniqueId = PLAYER_ID;
+                                startGamePacket.entityRuntimeId = PLAYER_ID;
+                                startGamePacket.playerGamemode =
+                                    player.getGamemode();
+                                startGamePacket.playerPosition = {
+                                    x: 0,
+                                    y: 0,
+                                    z: 0
+                                };
+                                startGamePacket.rotation = {
+                                    x: 0,
+                                    z: 0
+                                };
+                                startGamePacket.seed = 0;
+                                startGamePacket.biomeType = 0;
+                                startGamePacket.biomeName = 'Plains'; //TODO: Add more biomes
+                                startGamePacket.dimension = Dimension.OVERWORLD;
+                                startGamePacket.generator = Generator.FLAT; //TODO: Add default generator to config
+                                startGamePacket.worldGamemode =
+                                    player.getGamemode();
+                                startGamePacket.difficulty =
+                                    this.getProperties().get('difficulty');
+                                startGamePacket.spawnPosition = {
+                                    x: 0,
+                                    y: 0,
+                                    z: 0
+                                };
+                                startGamePacket.AchievementsDisabled = true;
+                                startGamePacket.gameRules = []; //TODO: Add game rules
+                                startGamePacket.itemStates = []; //TODO: Add item states
+                                startGamePacket.experiments = [];
+                                startGamePacket.experimentsPreviouslyUsed =
+                                    false;
+                                startGamePacket.permissionLevel =
+                                    player.getPermissionLevel();
+                                startGamePacket.worldName =
+                                    this.getProperties().get('default-world');
+                                startGamePacket.playerMovementSettings =
+                                    new PlayerMovementSettings(
+                                        PlayerMovementSettings.SERVER,
+                                        0,
+                                        false
+                                    );
+                                player.sendDataPacket(startGamePacket);
                         }
                         break;
                 }
             });
         });
+    }
+
+    getDefaultWorld() {
+        return this.getProperties().get('default-world');
     }
 
     /**
