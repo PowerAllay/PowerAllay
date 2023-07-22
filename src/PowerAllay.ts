@@ -9,6 +9,8 @@ import { ProtocolInfo } from './network/packets/ProtocolInfo';
 import { EventEmitter } from 'node:events';
 import { PlayerLoginEvent } from './events/player/PlayerLoginEvent';
 import { Events } from './events/AllayEvent';
+import { ClientManager } from './player/ClientManager';
+import { ClientInfo } from './player/ClientInfo';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -19,7 +21,8 @@ export class PowerAllay {
     private properties: Config;
     private language: Language;
     private readonly dataPath: string;
-    private readonly baselogger: BaseLogger;
+    private readonly baseLogger: BaseLogger;
+    private readonly clientManager: ClientManager;
     private main: any;
     private readonly players: Client[] = [];
     private events: EventEmitter;
@@ -29,7 +32,8 @@ export class PowerAllay {
      */
     constructor() {
         this.dataPath = path.join(__dirname, '..');
-        this.baselogger = new BaseLogger(this);
+        this.baseLogger = new BaseLogger(this);
+        this.clientManager = new ClientManager(this);
         this.events = new EventEmitter();
         this.initProperties();
         this.initLanguage();
@@ -100,7 +104,6 @@ export class PowerAllay {
         );
         this.main.on('connect', (client: Player) => {
             client.on('login', () => {
-                const player = new Client(client);
                 this.getLogger().info(
                     this.getLanguage().translate(
                         'player-login',
@@ -109,7 +112,9 @@ export class PowerAllay {
                 );
                 this.events.emit(
                     Events.PLAYER_LOGIN_EVENT,
-                    new PlayerLoginEvent(player)
+                    new PlayerLoginEvent(
+                        new ClientInfo(client.profile.xuid, client.profile.name)
+                    )
                 );
                 if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
                     client.disconnect('Outdated client!');
@@ -130,12 +135,12 @@ export class PowerAllay {
                 }
             });
             client.on('join', () => {
-                const player = new Client(client);
+                const player = this.clientManager.getPlayer(client);
                 this.players.push(player);
                 player.sendDataPacket(new ResourcePacksInfoPacket());
             });
             client.on('close', () => {
-                const player = new Client(client);
+                const player = this.clientManager.getPlayer(client);
                 this.getLogger().info(
                     this.getLanguage().translate(
                         'player-logout',
@@ -165,7 +170,7 @@ export class PowerAllay {
      * Get server logger
      */
     getLogger() {
-        return this.baselogger;
+        return this.baseLogger;
     }
 
     /**
@@ -173,6 +178,16 @@ export class PowerAllay {
      */
     getLanguage() {
         return this.language;
+    }
+
+    /**
+     * Get server players
+     *
+     * @param event
+     * @param args
+     */
+    callEvent(event: string, ...args: any[]) {
+        this.events.emit(event, ...args);
     }
 
     /**

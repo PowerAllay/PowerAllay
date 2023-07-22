@@ -1,22 +1,62 @@
 import { Player } from 'bedrock-protocol';
 import { DataPacket } from '../network/packets/DataPacket';
 import { ClientInfo } from './ClientInfo';
+import { PowerAllay } from '../PowerAllay';
 
 export class Client {
     private _client: Player;
     private readonly clientInfo: ClientInfo;
     private readonly uuid: string;
     private readonly name: string;
+    private readonly server: PowerAllay;
 
-    constructor(player: Player) {
+    constructor(
+        server: PowerAllay,
+        player: Player,
+        data: object | null = null
+    ) {
         this._client = player;
         const playerData = player.getUserData();
         // @ts-ignore
         // prettier-ignore
-        this.clientInfo = new ClientInfo(player.profile.xuid, playerData.displayName);
+        this.clientInfo = data ? new ClientInfo(data.clientInfo.xuid, data.clientInfo.name)
+                                : new ClientInfo(player.profile.xuid, player.profile.name);
         // @ts-ignore
         this.uuid = playerData.identity;
         this.name = player.profile.name;
+        this.server = server;
+    }
+
+    /**
+     * Get client info
+     */
+    getClientInfo(): ClientInfo {
+        return this.clientInfo;
+    }
+
+    /**
+     * Get client uuid
+     */
+    getSaveData(): object {
+        return {
+            clientInfo: this.getClientInfo(),
+            uuid: this.uuid,
+            name: this.name
+        };
+    }
+
+    /**
+     * Get server
+     */
+    getServers(): PowerAllay {
+        return this.server;
+    }
+
+    /**
+     * Get client session
+     */
+    getSession(): Player {
+        return this._client;
     }
 
     sendDataPacket(packet: DataPacket): void {
