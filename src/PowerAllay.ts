@@ -28,6 +28,10 @@ import { NetworkChunkPublisherUpdatePacket } from './network/packets/NetworkChun
 import { Vector3 } from './math/Vector3';
 import { ClientCacheStatusPacket } from './network/packets/ClientCacheStatusPacket';
 import { World } from './world/World';
+import { LevelChunkPacket } from './network/packets/LevelChunkPacket';
+import { ChunkPosition } from './network/packets/types/ChunkPosition';
+import { PlayStatusPacket } from './network/packets/PlayStatusPacket';
+import { PlayerQuitEvent } from './events/player/PlayerQuitEvent';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -122,6 +126,7 @@ export class PowerAllay {
             client.on('close', () => {
                 const player = this.clientManager.getPlayer(client);
                 this.getLogger().info(this.getLanguage().translate('player-logout', client.profile.name));
+                this.events.emit(Events.PLAYER_QUIT_EVENT, new PlayerQuitEvent(player));
                 this.players.splice(this.players.indexOf(player), 1);
             });
             client.on('spawn', () => {});
@@ -208,6 +213,7 @@ export class PowerAllay {
                                 networkChunkPublisherUpdatePacket.radius = player.getViewDistance() * 16;
                                 networkChunkPublisherUpdatePacket.saved_chunks = [];
                                 player.sendDataPacket(networkChunkPublisherUpdatePacket);
+                                break;
                         }
                         break;
                 }
