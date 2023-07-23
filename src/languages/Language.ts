@@ -16,7 +16,9 @@ export class Language {
         if (this.getName() === undefined) {
             throw new LogicException(`Language ${this.currentLanguage} not found!`);
         } else {
-            this.languages = JSON.parse(fs.readFileSync(`${this.server.getDataPath()}/src/languages/${this.currentLanguage}.json`, 'utf-8'));
+            this.languages = JSON.parse(
+                fs.readFileSync(`${this.server.getDataPath()}/src/languages/${this.currentLanguage}.json`, 'utf-8')
+            );
         }
     }
 

@@ -7,4 +7,4 @@
 
 > a software for Minecraft: Bedrock Edition written in Typescript
 
-[![Discord Banner](https://discordapp.com/api/guilds/1132224503880089620/widget.png?style=banner3)](https://discord.gg/hZE2mzbw8f)
+[![Discord Banner](https://discord.com/api/guilds/1132224503880089620/widget.png?style=banner3)](https://discord.gg/hZE2mzbw8f)

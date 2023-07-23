@@ -23,7 +23,9 @@ export class Client extends Entity {
         super();
         this._client = player;
         const playerData = player.getUserData();
-        this.clientInfo = data ? new ClientInfo(data.clientInfo.xuid, data.clientInfo.name) : new ClientInfo(player.profile.xuid, player.profile.name);
+        this.clientInfo = data
+            ? new ClientInfo(data.clientInfo.xuid, data.clientInfo.name)
+            : new ClientInfo(player.profile.xuid, player.profile.name);
         this.uuid = data ? data.uuid : player.profile.xuid;
         this.name = data ? data.name : player.profile.name;
         this.server = server;

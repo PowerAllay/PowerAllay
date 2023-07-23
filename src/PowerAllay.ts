@@ -18,7 +18,12 @@ import { Dimension } from './world/dimension/Dimension';
 import { Generator } from './world/generator/Generator';
 import { PlayerMovementSettings } from './network/packets/types/PlayerMovementSettings';
 import { BiomeDefinitionListPacket } from './network/packets/BiomeDefinitionListPacket';
-import { biome_definition_list, available_entity_identifiers, creative_content, update_attributes } from '@powerallay/bedrock-data';
+import {
+    biome_definition_list,
+    available_entity_identifiers,
+    creative_content,
+    update_attributes
+} from '@powerallay/bedrock-data';
 import { AvailableEntityPacket } from './network/packets/AvailableEntityPacket';
 import { CreativeContentPacket } from './network/packets/CreativeContentPacket';
 import { SetCommandsEnablePacket } from './network/packets/SetCommandsEnablePacket';
@@ -32,6 +37,8 @@ import { LevelChunkPacket } from './network/packets/LevelChunkPacket';
 import { ChunkPosition } from './network/packets/types/ChunkPosition';
 import { PlayStatusPacket } from './network/packets/PlayStatusPacket';
 import { PlayerQuitEvent } from './events/player/PlayerQuitEvent';
+import { WorldManager } from './world/WorldManager';
+import * as fs from 'fs';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -44,6 +51,7 @@ export class PowerAllay {
     private readonly dataPath: string;
     private readonly baseLogger: BaseLogger;
     private readonly clientManager: ClientManager;
+    private readonly worldManager: WorldManager;
     private main: any;
     private readonly players: Client[] = [];
     private events: EventEmitter;
@@ -57,8 +65,14 @@ export class PowerAllay {
         this.baseLogger = new BaseLogger(this);
         this.clientManager = new ClientManager(this);
         this.events = new EventEmitter();
+        this.worldManager = new WorldManager(this, path.join(this.getDataPath(), 'worlds'));
         this.initProperties();
         this.initLanguage();
+        for (const file of [path.join(this.getDataPath(), 'players'), path.join(this.getDataPath(), 'worlds')]) {
+            if (!fs.existsSync(file)) {
+                fs.mkdirSync(file);
+            }
+        }
         this.start().then();
     }
 
@@ -89,7 +103,9 @@ export class PowerAllay {
      */
     private initLanguage() {
         this.language = new Language(this);
-        this.getLogger().info(this.getLanguage().translate('selected-language', this.language.getLanguage(), this.language.getName()));
+        this.getLogger().info(
+            this.getLanguage().translate('selected-language', this.language.getLanguage(), this.language.getName())
+        );
     }
 
     async start() {
@@ -105,11 +121,16 @@ export class PowerAllay {
             offline: false,
             version: ProtocolInfo.MINECRAFT_VERSION as Version
         });
-        this.getLogger().info(this.getLanguage().translate('minecraft-running-version', ProtocolInfo.MINECRAFT_VERSION));
+        this.getLogger().info(
+            this.getLanguage().translate('minecraft-running-version', ProtocolInfo.MINECRAFT_VERSION)
+        );
         this.main.on('connect', (client: Player) => {
             client.on('login', () => {
                 this.getLogger().info(this.getLanguage().translate('player-login', client.profile.name));
-                this.events.emit(Events.PLAYER_LOGIN_EVENT, new PlayerLoginEvent(new ClientInfo(client.profile.xuid, client.profile.name)));
+                this.events.emit(
+                    Events.PLAYER_LOGIN_EVENT,
+                    new PlayerLoginEvent(new ClientInfo(client.profile.xuid, client.profile.name))
+                );
                 if (client.version < ProtocolInfo.CURRENT_PROTOCOL) {
                     client.disconnect('Outdated client!');
                     this.getLogger().info(this.getLanguage().translate('outdated-client', client.profile.name));
@@ -173,7 +194,11 @@ export class PowerAllay {
                                 startGamePacket.experimentsPreviouslyUsed = false;
                                 startGamePacket.permissionLevel = player.getPermissionLevel();
                                 startGamePacket.worldName = this.getProperties().get('default-world');
-                                startGamePacket.playerMovementSettings = new PlayerMovementSettings(PlayerMovementSettings.SERVER, 0, false);
+                                startGamePacket.playerMovementSettings = new PlayerMovementSettings(
+                                    PlayerMovementSettings.SERVER,
+                                    0,
+                                    false
+                                );
                                 player.sendDataPacket(startGamePacket);
                                 this.getLogger().debug('Sending entity definitions');
                                 // eslint-disable-next-line no-case-declarations
@@ -221,10 +246,6 @@ export class PowerAllay {
         });
     }
 
-    getDefaultWorld() {
-        return this.getProperties().get('default-world');
-    }
-
     /**
      * Get server data path
      */
@@ -251,6 +272,13 @@ export class PowerAllay {
      */
     getLanguage() {
         return this.language;
+    }
+
+    /**
+     * Get world manager
+     */
+    getWorldManager(): WorldManager {
+        return this.worldManager;
     }
 
     /**
