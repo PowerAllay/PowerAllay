@@ -6,3 +6,5 @@
 [![GitHub issues](https://img.shields.io/github/issues/PowerAllay/PowerAllay.svg)](https://github.com/PowerAllay/PowerAllay/issues)
 
 > a software for Minecraft: Bedrock Edition written in Typescript
+
+![Discord Banner](https://discordapp.com/api/guilds/1132224503880089620/widget.png?style=banner3)

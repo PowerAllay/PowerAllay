@@ -5,6 +5,7 @@
     "default-world": "world",
     "difficulty": 2,
     "default-gamemode": 0,
+    "view-distance": 16,
     "language": "en_US",
     "debug": false
 }
