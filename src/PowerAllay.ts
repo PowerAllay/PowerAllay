@@ -39,6 +39,8 @@ import { PlayStatusPacket } from './network/packets/PlayStatusPacket';
 import { PlayerQuitEvent } from './events/player/PlayerQuitEvent';
 import { WorldManager } from './world/WorldManager';
 import * as fs from 'fs';
+import { Flat } from './world/generator/Flat';
+import { BlockFactory } from './block/BlockFactory';
 
 export const VersionInfo = {
     name: 'PowerAllay',
@@ -68,11 +70,16 @@ export class PowerAllay {
         this.worldManager = new WorldManager(this, path.join(this.getDataPath(), 'worlds'));
         this.initProperties();
         this.initLanguage();
+        BlockFactory.init().then(() => {
+            this.getLogger().info('Blocks loaded!');
+        });
+        this.getLogger().info(this.getLanguage().translate('powerally-license', VersionInfo.name));
         for (const file of [path.join(this.getDataPath(), 'players'), path.join(this.getDataPath(), 'worlds')]) {
             if (!fs.existsSync(file)) {
                 fs.mkdirSync(file);
             }
         }
+        Generator.register(new Flat(), 'flat');
         this.start().then();
     }
 
@@ -87,6 +94,7 @@ export class PowerAllay {
             'server-port': 19132,
             motd: 'PowerAllay',
             'max-players': 20,
+            'online-mode': true,
             'default-world': 'world',
             difficulty: 2,
             'default-gamemode': 0,
@@ -114,11 +122,11 @@ export class PowerAllay {
             host: '127.0.0.1',
             port: this.getProperties().get('server-port'),
             motd: {
-                levelName: this.getProperties().get('default-world'),
+                levelName: this.getProperties().get('motd'),
                 motd: this.getProperties().get('motd')
             },
             maxPlayers: this.getProperties().get('max-players') || 20,
-            offline: false,
+            offline: !this.getProperties().get('online-mode'),
             version: ProtocolInfo.MINECRAFT_VERSION as Version
         });
         this.getLogger().info(

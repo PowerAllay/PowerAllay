@@ -36,6 +36,7 @@
   "dependencies": {
     "@powerallay/bedrock-data": "github:PowerAllay/BedrockData",
     "@types/node": "^20.4.2",
+    "assert": "^2.0.0",
     "bedrock-protocol": "^3.30.0",
     "events": "^3.3.0",
     "fs": "^0.0.1-security",

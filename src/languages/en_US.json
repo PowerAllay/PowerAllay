@@ -5,5 +5,6 @@
   "player-login": "Player {0} has logged in",
   "player-logout": "Player {0} has logged out",
   "outdated-client": "Player {0} has tried to join with an outdated client",
-  "outdated-server": "Player {0} has tried to join with an outdated server"
+  "outdated-server": "Player {0} has tried to join with an outdated server",
+  "powerally-license": "{0} is distributed under the GPL-3.0 license"
 }
