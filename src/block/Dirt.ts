@@ -1,6 +1,6 @@
-import { BlockIdentifier } from './block/BlockIdentifier';
-import { BlockIds } from './block/BlockIds';
-import { Block } from './block/Block';
+import { BlockIdentifier } from './BlockIdentifier';
+import { BlockIds } from './BlockIds';
+import { Block } from './Block';
 
 export class Dirt extends Block {
     constructor() {
