@@ -52,7 +52,7 @@ export class Chunk {
     setBlock(x: number, y: number, z: number, block: Block): void {
         const subChunkIndex: number = Math.floor(y / Chunk.MAX_SUBCHUNKS);
         if (subChunkIndex >= 0 && subChunkIndex < Chunk.MAX_SUBCHUNKS) {
-            let subChunk: subChunk = this.getSubChunk(subChunkIndex);
+            const subChunk: subChunk = this.getSubChunk(subChunkIndex);
             subChunk.setBlock(x, y, z, block);
         }
     }

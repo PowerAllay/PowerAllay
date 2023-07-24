@@ -26,7 +26,7 @@ export class BlockFactory {
         if (id > 0xff) {
             throw new InvalidArgumentException('Block id must be between 0 and 255');
         }
-        let blocks = Array.from(BlockFactory.blocks.values());
+        const blocks = Array.from(BlockFactory.blocks.values());
         return blocks.find((block: Block) => {
             return block.getId() === id && block.getMeta() === meta;
         });

@@ -31,11 +31,11 @@ export class Flat extends Generator {
     }
 
     async generateChunk(chunkPosition: ChunkPosition): Promise<Chunk> {
-        let chunkX = chunkPosition.getX();
-        let chunkZ = chunkPosition.getZ();
-        let blocks: Block[] = [];
+        const chunkX = chunkPosition.getX();
+        const chunkZ = chunkPosition.getZ();
+        const blocks: Block[] = [];
         this.layers.forEach((layer) => {
-            let block = BlockFactory.getBlock(layer.block);
+            const block = BlockFactory.getBlock(layer.block);
             for (let y = 0; y < layer.height; y++) {
                 blocks.push(block);
             }
